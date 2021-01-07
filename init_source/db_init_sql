@@ -1,0 +1,44 @@
+-- mysql数据库初始化表
+CREATE TABLE `api` (
+  `api_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增长',
+  `api_name` varchar(50) NOT NULL COMMENT '接口名',
+  `file_name` varchar(50) NOT NULL COMMENT '接口对应的测试数据',
+  `req_url` varchar(50) NOT NULL COMMENT '请求接口的URL',
+  `req_method` varchar(50) NOT NULL COMMENT '接口的请求方式',
+  `param_type` varchar(20) NOT NULL COMMENT '传参方式',
+  `is_rely` tinyint(4) DEFAULT '0' COMMENT '是否依赖数据库',
+  `status` tinyint(4) DEFAULT '0',
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`api_id`),
+  UNIQUE KEY `api_name` (`api_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for case
+-- ----------------------------
+DROP TABLE IF EXISTS `case`;
+CREATE TABLE `api_case` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增',
+  `api_id` int(11) NOT NULL COMMENT '对应interface_api的api_id',
+  `req_data` varchar(255) DEFAULT NULL COMMENT '请求接口时传的参数',
+  `rely_data` varchar(255) DEFAULT NULL COMMENT '用例依赖的数据',
+  `expect_code` int(11) DEFAULT NULL COMMENT '接口期望响应code',
+  `res_data` varchar(255) DEFAULT NULL COMMENT '依赖数据存储',
+  `check_point` varchar(255) DEFAULT NULL COMMENT '接口响应校验依据',
+  `status` tinyint(4) DEFAULT '0' COMMENT '用例执行状态，0 不执行 1 执行',
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `api_id` (`api_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for data_storage
+-- ----------------------------
+DROP TABLE IF EXISTS `data_storage`;
+CREATE TABLE `data_storage` (
+  `api_id` int(11) NOT NULL COMMENT '对应api的api_id',
+  `case_id` int(11) NOT NULL COMMENT '对应case的id',
+  `rely_data` varchar(255) DEFAULT NULL COMMENT '存储的依赖数据',
+  `create_time` datetime DEFAULT NULL,
+  KEY `api_id` (`api_id`,`case_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
